@@ -1,0 +1,11 @@
+streamlit
+pandas
+spacy
+transformers
+langdetect
+plotly
+torch
+tqdm
+
+# Pull in the spaCy English model directly from GitHub
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
