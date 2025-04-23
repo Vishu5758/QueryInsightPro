@@ -1,0 +1,502 @@
+{
+  "travel": [
+    "flight",
+    "book",
+    "trip"
+  ],
+  "finance": [
+    "loan",
+    "bank",
+    "invest"
+  ],
+  "technology": [
+    "gadgets",
+    "innovation",
+    "software"
+  ],
+  "health": [
+    "nutrition",
+    "exercise",
+    "hygiene"
+  ],
+  "education": [
+    "learning",
+    "courses",
+    "exams"
+  ],
+  "food": [
+    "recipes",
+    "restaurants",
+    "cuisine"
+  ],
+  "entertainment": [
+    "movies",
+    "concerts",
+    "theater"
+  ],
+  "sports": [
+    "football",
+    "basketball",
+    "tennis"
+  ],
+  "science": [
+    "research",
+    "experiment",
+    "theory"
+  ],
+  "art": [
+    "painting",
+    "sculpture",
+    "gallery"
+  ],
+  "history": [
+    "ancient",
+    "medieval",
+    "modern"
+  ],
+  "politics": [
+    "election",
+    "policy",
+    "campaign"
+  ],
+  "environment": [
+    "conservation",
+    "pollution",
+    "recycling"
+  ],
+  "business": [
+    "startup",
+    "strategy",
+    "profit"
+  ],
+  "lifestyle": [
+    "minimalism",
+    "routine",
+    "hobbies"
+  ],
+  "automotive": [
+    "vehicles",
+    "maintenance",
+    "reviews"
+  ],
+  "real_estate": [
+    "property",
+    "mortgage",
+    "rent"
+  ],
+  "fashion": [
+    "design",
+    "runway",
+    "trend"
+  ],
+  "beauty": [
+    "skincare",
+    "makeup",
+    "haircare"
+  ],
+  "music": [
+    "genres",
+    "instruments",
+    "recording"
+  ],
+  "movies": [
+    "directors",
+    "genres",
+    "reviews"
+  ],
+  "books": [
+    "fiction",
+    "nonfiction",
+    "authors"
+  ],
+  "programming": [
+    "Python",
+    "JavaScript",
+    "C++"
+  ],
+  "artificial_intelligence": [
+    "machine learning",
+    "neural networks",
+    "robotics"
+  ],
+  "machine_learning": [
+    "supervised",
+    "unsupervised",
+    "reinforcement"
+  ],
+  "data_science": [
+    "analytics",
+    "visualization",
+    "statistics"
+  ],
+  "cybersecurity": [
+    "threats",
+    "encryption",
+    "firewalls"
+  ],
+  "blockchain": [
+    "smart contracts",
+    "decentralization",
+    "tokens"
+  ],
+  "cryptocurrency": [
+    "Bitcoin",
+    "Ethereum",
+    "Altcoins"
+  ],
+  "economics": [
+    "inflation",
+    "GDP",
+    "markets"
+  ],
+  "marketing": [
+    "SEO",
+    "branding",
+    "advertising"
+  ],
+  "sales": [
+    "leads",
+    "closing",
+    "negotiation"
+  ],
+  "human_resources": [
+    "recruitment",
+    "training",
+    "benefits"
+  ],
+  "management": [
+    "leadership",
+    "planning",
+    "organization"
+  ],
+  "startups": [
+    "pitch",
+    "funding",
+    "growth"
+  ],
+  "entrepreneurship": [
+    "innovation",
+    "risk",
+    "scaling"
+  ],
+  "productivity": [
+    "time management",
+    "tools",
+    "goals"
+  ],
+  "remote_work": [
+    "telecommuting",
+    "tools",
+    "work-life balance"
+  ],
+  "communication": [
+    "verbal",
+    "written",
+    "listening"
+  ],
+  "psychology": [
+    "behavior",
+    "cognition",
+    "therapy"
+  ],
+  "relationships": [
+    "dating",
+    "friendship",
+    "family"
+  ],
+  "parenting": [
+    "education",
+    "health",
+    "behavior"
+  ],
+  "photography": [
+    "portrait",
+    "landscape",
+    "editing"
+  ],
+  "videography": [
+    "shooting",
+    "editing",
+    "storyboarding"
+  ],
+  "graphic_design": [
+    "logos",
+    "typography",
+    "branding"
+  ],
+  "ux_ui": [
+    "wireframing",
+    "prototyping",
+    "accessibility"
+  ],
+  "web_development": [
+    "frontend",
+    "backend",
+    "fullstack"
+  ],
+  "mobile_development": [
+    "iOS",
+    "Android",
+    "cross-platform"
+  ],
+  "cloud_computing": [
+    "AWS",
+    "Azure",
+    "Google Cloud"
+  ],
+  "devops": [
+    "CI/CD",
+    "containers",
+    "monitoring"
+  ],
+  "networking": [
+    "routers",
+    "protocols",
+    "security"
+  ],
+  "quality_assurance": [
+    "testing",
+    "automation",
+    "bug tracking"
+  ],
+  "automation": [
+    "scripting",
+    "RPA",
+    "AI"
+  ],
+  "robotics": [
+    "sensors",
+    "actuators",
+    "control systems"
+  ],
+  "drones": [
+    "aerial",
+    "photography",
+    "mapping"
+  ],
+  "nanotechnology": [
+    "nanomaterials",
+    "nanomedicine",
+    "nanofabrication"
+  ],
+  "biotechnology": [
+    "genetics",
+    "biopharma",
+    "bioengineering"
+  ],
+  "astronomy": [
+    "telescopes",
+    "stars",
+    "planets"
+  ],
+  "physics": [
+    "quantum",
+    "thermodynamics",
+    "mechanics"
+  ],
+  "chemistry": [
+    "organic",
+    "inorganic",
+    "analytical"
+  ],
+  "biology": [
+    "cell biology",
+    "ecology",
+    "genetics"
+  ],
+  "geology": [
+    "minerals",
+    "plate tectonics",
+    "fossils"
+  ],
+  "meteorology": [
+    "weather forecasting",
+    "climate",
+    "atmosphere"
+  ],
+  "agriculture": [
+    "farming",
+    "crops",
+    "irrigation"
+  ],
+  "fisheries": [
+    "aquaculture",
+    "sustainability",
+    "stocks"
+  ],
+  "forestry": [
+    "conservation",
+    "timber",
+    "wildlife"
+  ],
+  "renewable_energy": [
+    "solar",
+    "wind",
+    "hydro"
+  ],
+  "solar_energy": [
+    "photovoltaic",
+    "solar panels",
+    "thermal"
+  ],
+  "wind_energy": [
+    "turbines",
+    "wind farms",
+    "offshore"
+  ],
+  "battery_technology": [
+    "lithium-ion",
+    "capacity",
+    "charging"
+  ],
+  "electric_vehicles": [
+    "Tesla",
+    "range",
+    "charging stations"
+  ],
+  "public_transport": [
+    "buses",
+    "trains",
+    "subways"
+  ],
+  "urban_planning": [
+    "zoning",
+    "infrastructure",
+    "sustainability"
+  ],
+  "architecture": [
+    "design",
+    "structures",
+    "materials"
+  ],
+  "interior_design": [
+    "furniture",
+    "lighting",
+    "color schemes"
+  ],
+  "gardening": [
+    "plants",
+    "landscaping",
+    "soil"
+  ],
+  "diy": [
+    "woodworking",
+    "home improvement",
+    "crafts"
+  ],
+  "crafts": [
+    "knitting",
+    "painting",
+    "sculpting"
+  ],
+  "gaming": [
+    "PC",
+    "console",
+    "mobile"
+  ],
+  "esports": [
+    "tournaments",
+    "teams",
+    "streaming"
+  ],
+  "puzzles": [
+    "crossword",
+    "jigsaw",
+    "logic games"
+  ],
+  "board_games": [
+    "strategy",
+    "family",
+    "party"
+  ],
+  "card_games": [
+    "poker",
+    "bridge",
+    "collectible"
+  ],
+  "collectibles": [
+    "stamps",
+    "coins",
+    "memorabilia"
+  ],
+  "antiques": [
+    "furniture",
+    "jewelry",
+    "collectibles"
+  ],
+  "hotels": [
+    "luxury",
+    "budget",
+    "boutique"
+  ],
+  "hostels": [
+    "dorms",
+    "backpacking",
+    "community"
+  ],
+  "vacation_rentals": [
+    "Airbnb",
+    "Vrbo",
+    "short-term"
+  ],
+  "airlines": [
+    "domestic",
+    "international",
+    "budget"
+  ],
+  "airports": [
+    "terminals",
+    "security",
+    "lounges"
+  ],
+  "travel_insurance": [
+    "coverage",
+    "claims",
+    "policies"
+  ],
+  "visa_services": [
+    "applications",
+    "consultation",
+    "renewals"
+  ],
+  "cultural_events": [
+    "concerts",
+    "festivals",
+    "workshops"
+  ],
+  "festivals": [
+    "music",
+    "food",
+    "cultural"
+  ],
+  "cooking": [
+    "baking",
+    "grilling",
+    "saut\u00e9ing"
+  ],
+  "recipes": [
+    "vegan",
+    "desserts",
+    "quick meals"
+  ],
+  "nutrition": [
+    "diets",
+    "vitamins",
+    "supplements"
+  ],
+  "fitness": [
+    "cardio",
+    "strength training",
+    "yoga"
+  ],
+  "mental_health": [
+    "therapy",
+    "mindfulness",
+    "stress management"
+  ],
+  "wellness": [
+    "spa",
+    "meditation",
+    "self-care"
+  ]
+}
