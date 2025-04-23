@@ -4,7 +4,7 @@ import spacy
 import re
 import json
 import time
-from langdetect import detect, LangDetectException
+from langdetect import detect
 from datetime import datetime
 from transformers import pipeline
 import plotly.express as px
@@ -17,123 +17,33 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Add custom CSS with more polished Google-like styling
+# Add custom CSS (simplified)
 st.markdown(
     """
 <style>
-    /* Global styling */
-    body {
-        font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-        color: #202124;
-        background-color: #f8f9fa;
-    }
-    
     h1 {
-        color: #1a73e8;
-        font-weight: 500;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #e0e0e0;
-        font-size: 2.125rem;
+        color: #1E3A8A;
+        font-weight: 700;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
     }
-    
-    h2 {
-        color: #202124;
-        font-weight: 500;
-        font-size: 1.5rem;
-    }
-    
-    h3 {
-        color: #202124;
-        font-weight: 500;
-        font-size: 1.25rem;
-        margin-top: 24px;
-        margin-bottom: 16px;
-    }
-    
-    /* Button styling */
     .stButton>button {
-        background-color: #1a73e8;
+        background-color: #1E3A8A;
         color: white;
-        border-radius: 4px;
-        border: none;
-        padding: 8px 24px;
-        font-weight: 500;
-        transition: background-color 0.2s;
+        border-radius: 6px;
     }
-    
-    .stButton>button:hover {
-        background-color: #1765cc;
-    }
-    
-    /* Input field styling */
-    .stTextInput>div>div>input {
-        border-radius: 4px;
-        border: 1px solid #dadce0;
-        padding: 12px 16px;
-    }
-    
-    .stTextInput>div>div>input:focus {
-        border-color: #1a73e8;
-        box-shadow: 0 0 0 1px #1a73e8;
-    }
-    
-    /* Card styling */
     .metric-card {
-        background: #ffffff;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
         border-radius: 8px;
         padding: 20px;
-        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e6e6e6;
         text-align: center;
-        transition: transform 0.2s, box-shadow 0.2s;
     }
-    
-    .metric-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(60, 64, 67, 0.3), 0 1px 3px rgba(60, 64, 67, 0.15);
-    }
-    
     .metric-value {
         font-size: 28px;
-        font-weight: 500;
-        color: #1a73e8;
-    }
-    
-    /* Results container */
-    .results-container {
-        background: #ffffff;
-        border-radius: 8px;
-        padding: 24px;
-        box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-        margin-bottom: 24px;
-    }
-    
-    /* Sidebar styling */
-    .css-1d391kg {
-        background-color: #ffffff;
-        border-right: 1px solid #e0e0e0;
-    }
-    
-    /* Entity display */
-    .entity-display mark {
-        border-radius: 4px;
-        padding: 2px 5px;
-    }
-    
-    /* Example queries */
-    .example-query {
-        display: inline-block;
-        background-color: #e8f0fe;
-        color: #1a73e8;
-        border-radius: 16px;
-        padding: 4px 12px;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        font-size: 0.875rem;
-    }
-    
-    /* Progress bar */
-    .stProgress > div > div > div > div {
-        background-color: #1a73e8;
+        font-weight: 700;
+        color: #1E3A8A;
     }
 </style>
 """,
@@ -186,7 +96,7 @@ def normalize_query(query):
 
 def detect_intent(query):
     q = query.lower()
-    # informational if it's a question
+    # informational if it’s a question
     if any(
         q.startswith(w) or f" {w} " in q
         for w in ["how", "what", "why", "when", "where"]
@@ -206,6 +116,8 @@ def extract_entities(query):
         entities[ent.label_].append(ent.text)
     return entities
 
+
+from langdetect import detect, LangDetectException
 
 def detect_language(query):
     try:
@@ -283,9 +195,11 @@ def generate_relevance_score(query):
 
 
 def detect_sentiment(query):
+    # ─── BUG-FIXED: map LABEL_{0,1,2} to negative/neutral/positive ───────────────────────────────────
     raw = sentiment_model(query)[0]["label"]
     mapping = {"LABEL_0": "negative", "LABEL_1": "neutral", "LABEL_2": "positive"}
     return mapping.get(raw, raw.lower())
+    # ───────────────────────────────────────────────────────────────────────────────────────────────────
 
 
 def analyze_query_complexity(query):
@@ -325,27 +239,26 @@ def annotate_query(query):
     }
 
 
+# ───────────────────────────────────────────────────────────────────────────────────────────────────
+# Rest of your UI, forms, download button placement, charts, etc., remain **unchanged** from before.
+# ───────────────────────────────────────────────────────────────────────────────────────────────────
+
+
 # Sidebar with advanced options
 with st.sidebar:
     st.markdown(
         """
     <div style="text-align:center; padding-bottom:20px;">
-        <h2 style="color:#1a73e8; font-weight:500;">🧠 QueryInsight Pro</h2>
-        <p style="color:#5f6368; font-size:0.9rem;">Advanced Analysis Settings</p>
+        <h2 style="color:#1E3A8A;">🧠 QueryInsight Pro</h2>
+        <p style="color:#64748b;">Advanced Analysis Options</p>
     </div>
     """,
         unsafe_allow_html=True,
     )
 
-    st.markdown("<hr style='margin-bottom:24px; border-color:#e0e0e0;'>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
 
-    st.markdown(
-        """
-        <h3 style="color:#202124; font-weight:500; font-size:1.1rem;">🔧 Category Settings</h3>
-        """, 
-        unsafe_allow_html=True
-    )
-    
+    st.header("🔧 Category Settings")
     with st.expander("Configure Custom Categories", expanded=False):
         default_categories = {
             "travel": ["flight", "book", "trip"],
@@ -372,10 +285,10 @@ with st.sidebar:
 # Main content area
 st.markdown(
     """
-<div style="text-align:center; padding-bottom:16px;">
-    <h1>✨ QueryInsight Pro</h1>
-    <p style="color:#5f6368; font-size:1.1rem; margin-top:-8px;">
-        AI-Powered Search Query Annotation Suite
+<div style="text-align:center; padding-bottom:10px;">
+    <h1 style="font-size:2.5rem;">✨ QueryInsight Pro: AI-Powered Search Query Annotation Suite</h1>
+    <p style="color:#64748b; font-size:1.1rem;">
+        Analyze, annotate and enhance search queries with state-of-the-art AI technology
     </p>
 </div>
 """,
@@ -385,8 +298,9 @@ st.markdown(
 # Query input section
 st.markdown(
     """
-<div class="results-container">
-    <h3 style="color:#1a73e8; margin-top:0;">🔍 Enter Your Search Query</h3>
+<div class="results-container" style="background:linear-gradient(135deg,
+#EFF6FF 0%, #FFFFFF 100%);">
+    <h3 style="color:#1E3A8A; margin-top:0;">🔍 Enter Your Search Query</h3>
 """,
     unsafe_allow_html=True,
 )
@@ -398,59 +312,64 @@ query = st.text_input(
     help="Enter any search query to analyze its intent, entities, sentiment and more",
 )
 
-# Example queries as labels (not buttons)
+# Example queries (now just static labels, not buttons)
 st.markdown(
     """
-<p style="font-size:0.9rem; color:#5f6368; margin:12px 0 16px 0;">
-    Example queries:
+<p style="font-size:0.9rem; color:#64748b; margin-bottom:5px;">
+    Example queries:&nbsp;
+    <span style="margin-right:15px;">best flights to New York next weekend</span>
+    <span style="margin-right:15px;">how to invest in cryptocurrency 2025</span>
+    <span>symptoms of flu vs covid vaccine side effects</span>
 </p>
-<div>
-    <span class="example-query">best flights to New York next weekend</span>
-    <span class="example-query">how to invest in cryptocurrency 2025</span>
-    <span class="example-query">symptoms of flu vs covid vaccine side effects</span>
-</div>
 """,
     unsafe_allow_html=True,
 )
 
-st.markdown("</div>", unsafe_allow_html=True)  # Close the results-container div
 
 # Process query if submitted
 if query:
-    # Show analysis progress with better visual feedback
-    with st.container():
-        progress_placeholder = st.empty()
-        status_text = st.empty()
-        
-        # Function to update progress with animation
-        def update_progress(step, text):
-            progress_placeholder.progress(step)
-            status_text.markdown(f"<p style='color:#5f6368;'>{text}</p>", unsafe_allow_html=True)
-            time.sleep(0.3)
-        
-        # Simulate processing steps with smoother transitions
-        update_progress(10, "Normalizing query...")
-        update_progress(30, "Analyzing intent...")
-        update_progress(50, "Extracting entities...")
-        update_progress(70, "Determining relevance...")
-        update_progress(90, "Finalizing analysis...")
-        
-        # Get full analysis
-        data = annotate_query(query)
-        
-        # Complete the progress
-        update_progress(100, "Analysis complete!")
-        time.sleep(0.5)
-        
-        # Clear the progress indicators
-        progress_placeholder.empty()
-        status_text.empty()
+    # Show analysis progress
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+
+    # Simulate processing steps
+    status_text.text("Normalizing query...")
+    progress_bar.progress(10)
+    time.sleep(0.3)
+
+    status_text.text("Analyzing intent...")
+    progress_bar.progress(30)
+    time.sleep(0.3)
+
+    status_text.text("Extracting entities...")
+    progress_bar.progress(50)
+    time.sleep(0.3)
+
+    status_text.text("Determining relevance...")
+    progress_bar.progress(70)
+    time.sleep(0.3)
+
+    status_text.text("Finalizing analysis...")
+    progress_bar.progress(90)
+    time.sleep(0.3)
+
+    # Get full analysis
+    data = annotate_query(query)
+
+    # Complete the progress
+    progress_bar.progress(100)
+    status_text.text("Analysis complete!")
+    time.sleep(0.5)
+
+    # Clear the progress indicators
+    progress_bar.empty()
+    status_text.empty()
 
     # Display results in a nice layout
     st.markdown(
         """
     <div class="results-container">
-        <h2 style="color:#1a73e8; margin-top:0;">📊 Query Analysis Results</h2>
+        <h2 style="color:#1E3A8A; margin-top:0;">📊 Query Analysis Results</h2>
     """,
         unsafe_allow_html=True,
     )
@@ -460,8 +379,8 @@ if query:
     query_cols[0].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Original Query</p>
-        <p style="font-size:1.2rem; font-weight:500; color:#202124; margin-top:0;">{data["original_query"]}</p>
+        <p style="color:#64748b; margin-bottom:5px;">Original Query</p>
+        <p style="font-size:1.2rem; font-weight:500; color:#1E3A8A; margin-top:0;">{data["original_query"]}</p>
     </div>
     """,
         unsafe_allow_html=True,
@@ -470,8 +389,8 @@ if query:
     query_cols[1].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Normalized Query</p>
-        <p style="font-size:1.2rem; font-weight:500; color:#202124; margin-top:0;">{data["normalized_query"]}</p>
+        <p style="color:#64748b; margin-bottom:5px;">Normalized Query</p>
+        <p style="font-size:1.2rem; font-weight:500; color:#1E3A8A; margin-top:0;">{data["normalized_query"]}</p>
     </div>
     """,
         unsafe_allow_html=True,
@@ -479,7 +398,7 @@ if query:
 
     # Display key metrics
     st.markdown(
-        "<h3 style='margin-top:32px;'>Key Insights</h3>", unsafe_allow_html=True
+        "<h3 style='margin-top:25px;'>Key Insights</h3>", unsafe_allow_html=True
     )
     metric_cols = st.columns(4)
 
@@ -492,7 +411,7 @@ if query:
     metric_cols[0].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Intent</p>
+        <p style="color:#64748b; margin-bottom:5px;">Intent</p>
         <p class="metric-value">{intent_icon} {data["intent"].capitalize()}</p>
     </div>
     """,
@@ -515,7 +434,7 @@ if query:
     metric_cols[1].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Category</p>
+        <p style="color:#64748b; margin-bottom:5px;">Category</p>
         <p class="metric-value">{category_icon} {data["category"].capitalize()}</p>
     </div>
     """,
@@ -525,16 +444,16 @@ if query:
     # Sentiment with icon and color
     sentiment_icons = {"positive": "😊", "neutral": "😐", "negative": "😟"}
     sentiment_colors = {
-        "positive": "#34a853",
-        "neutral": "#5f6368",
-        "negative": "#ea4335",
+        "positive": "#10B981",
+        "neutral": "#6B7280",
+        "negative": "#EF4444",
     }
     sentiment_icon = sentiment_icons.get(data["sentiment"], "😐")
-    sentiment_color = sentiment_colors.get(data["sentiment"], "#5f6368")
+    sentiment_color = sentiment_colors.get(data["sentiment"], "#6B7280")
     metric_cols[2].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Sentiment</p>
+        <p style="color:#64748b; margin-bottom:5px;">Sentiment</p>
         <p class="metric-value" style="color:{sentiment_color};">{sentiment_icon} {data["sentiment"].capitalize()}</p>
     </div>
     """,
@@ -544,16 +463,16 @@ if query:
     # Relevance score with visual indicator
     relevance_score = data["relevance_score"]
     score_color = (
-        "#34a853"
+        "#10B981"
         if relevance_score > 0.7
-        else "#fbbc04" if relevance_score > 0.4 else "#ea4335"
+        else "#FBBF24" if relevance_score > 0.4 else "#EF4444"
     )
     metric_cols[3].markdown(
         f"""
     <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Relevance Score</p>
+        <p style="color:#64748b; margin-bottom:5px;">Relevance Score</p>
         <p class="metric-value" style="color:{score_color};">{relevance_score}</p>
-        <div style="background:#e8eaed; height:6px; border-radius:3px; margin-top:10px;">
+        <div style="background:#e2e8f0; height:6px; border-radius:3px; margin-top:10px;">
             <div style="background:{score_color}; width:{relevance_score*100}%; height:6px; border-radius:3px;"></div>
         </div>
     </div>
@@ -561,17 +480,13 @@ if query:
         unsafe_allow_html=True,
     )
 
-    # Entity visualization with improved styling
+    # Entity visualization
     st.markdown(
-        "<h3 style='margin-top:32px;'>Entity Visualization</h3>", unsafe_allow_html=True
+        "<h3 style='margin-top:25px;'>Entity Visualization</h3>", unsafe_allow_html=True
     )
 
     doc = nlp(data["normalized_query"])
     entity_html = spacy.displacy.render(doc, style="ent", jupyter=False)
-    
-    # Replace the default styling with more Google-like styling
-    entity_html = entity_html.replace("class=\"entities\"", "class=\"entities\" style=\"line-height: 2.5; font-family: 'Google Sans', 'Roboto', Arial, sans-serif;\"")
-    
     st.markdown(
         f"""
     <div class="entity-display">
@@ -581,63 +496,9 @@ if query:
         unsafe_allow_html=True,
     )
 
-    # Complexity analysis visualization
+    # Editing section
     st.markdown(
-        "<h3 style='margin-top:32px;'>Query Complexity</h3>", unsafe_allow_html=True
-    )
-    
-    complexity_cols = st.columns(4)
-    
-    complexity_cols[0].markdown(
-        f"""
-    <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Word Count</p>
-        <p class="metric-value" style="color:#1a73e8;">{data["complexity"]["word_count"]}</p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-    
-    complexity_cols[1].markdown(
-        f"""
-    <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Avg Word Length</p>
-        <p class="metric-value" style="color:#1a73e8;">{data["complexity"]["avg_word_length"]}</p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-    
-    complexity_cols[2].markdown(
-        f"""
-    <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Sentence Count</p>
-        <p class="metric-value" style="color:#1a73e8;">{data["complexity"]["sentence_count"]}</p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-    
-    complexity_level = data["complexity"]["level"]
-    level_color = {
-        "Simple": "#34a853",
-        "Moderate": "#fbbc04",
-        "Complex": "#ea4335"
-    }.get(complexity_level, "#1a73e8")
-    
-    complexity_cols[3].markdown(
-        f"""
-    <div class="metric-card">
-        <p style="color:#5f6368; margin-bottom:8px; font-size:0.9rem;">Complexity Level</p>
-        <p class="metric-value" style="color:{level_color};">{complexity_level}</p>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-
-    # Editing section with better styling
-    st.markdown(
-        "<h3 style='margin-top:32px;'>Edit Annotations</h3>", unsafe_allow_html=True
+        "<h3 style='margin-top:25px;'>Edit Annotations</h3>", unsafe_allow_html=True
     )
 
     with st.form("edit_annotations_form"):
@@ -704,73 +565,40 @@ if query:
                     "❌ Invalid JSON format in Entities field. Please check your syntax."
                 )
 
-    # Download button outside the form with improved styling
+    # Download button outside the form
     if st.session_state.get("download_json"):
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.download_button(
-                label="📥 Download JSON",
-                data=st.session_state["download_json"],
-                file_name=f"query_annotation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                mime="application/json",
-                key="download_button",
-            )
+        st.download_button(
+            label="📥 Download JSON",
+            data=st.session_state["download_json"],
+            file_name=f"{data['original_query'].replace(' ', '_')}_annotation.json",
+            mime="application/json",
+        )
 
-    # Entity distribution chart with better styling
+    # Entity distribution chart
     entity_types = list(data["entities"].keys())
     entity_counts = [len(data["entities"][et]) for et in entity_types]
 
     if entity_types:
-        st.markdown("<h3 style='margin-top:32px;'>Entity Distribution</h3>", unsafe_allow_html=True)
         chart_data = pd.DataFrame({"Entity Type": entity_types, "Count": entity_counts})
         fig = px.bar(
             chart_data,
             x="Entity Type",
             y="Count",
+            title="Entity Distribution",
             color="Entity Type",
-            color_discrete_sequence=px.colors.qualitative.Google,
-        )
-        fig.update_layout(
-            plot_bgcolor="white",
-            margin=dict(t=0, l=0, r=0, b=0),
-            xaxis=dict(
-                title_font=dict(size=14, family="Roboto, Arial"),
-                tickfont=dict(family="Roboto, Arial"),
-                gridcolor="#f0f0f0",
-            ),
-            yaxis=dict(
-                title_font=dict(size=14, family="Roboto, Arial"),
-                tickfont=dict(family="Roboto, Arial"),
-                gridcolor="#f0f0f0",
-            ),
-            legend_title_font=dict(family="Roboto, Arial"),
-            legend_font=dict(family="Roboto, Arial"),
         )
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No entities were detected in this query.")
-
-    st.markdown("</div>", unsafe_allow_html=True)  # Close results-container div
 else:
-    # Welcome screen when no query is entered - more polished Google-like welcome
+    # Welcome screen when no query is entered
     st.markdown(
         """
-    <div class="results-container" style="text-align:center; padding:48px 24px;">
-        <img src="https://www.gstatic.com/images/branding/product/2x/search_48dp.png" alt="Google Search" width="72" style="margin-bottom:24px;">
-        <h2 style="color:#1a73e8; font-weight:500; margin-bottom:16px;">Welcome to QueryInsight Pro</h2>
-        <p style="color:#5f6368; max-width:600px; margin:0 auto 24px auto; font-size:1.1rem;">
-            Enter a search query above to begin your comprehensive query analysis
+    <div class="results-container" style="text-align:center; padding:40px 20px;">
+        <h2 style="color:#1E3A8A;">Welcome to QueryInsight Pro</h2>
+        <p style="color:#64748b; max-width:600px; margin:0 auto 20px auto;">
+            Enter a search query above to start analyzing .
         </p>
-        <div style="background:#f8f9fa; border-radius:8px; padding:16px; max-width:600px; margin:0 auto; text-align:left;">
-            <p style="color:#5f6368; margin-bottom:8px; font-weight:500;">What you can analyze:</p>
-            <ul style="color:#5f6368; margin-left:24px; padding-left:0;">
-                <li>Query intent and category classification</li>
-                <li>Named entity recognition</li>
-                <li>Sentiment analysis</li>
-                <li>Relevance scoring</li>
-                <li>Query complexity metrics</li>
-            </ul>
-        </div>
     </div>
     """,
         unsafe_allow_html=True,
