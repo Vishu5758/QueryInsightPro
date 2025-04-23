@@ -1,0 +1,3 @@
+[server]
+# turn off file‐watcher entirely to avoid torch.classes errors
+fileWatcherType = "none"
