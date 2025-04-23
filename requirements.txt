@@ -1,15 +1,17 @@
-# 1) Critical C-extension dependency first
-numpy>=1.24.0
+# 1) Force numpy <2.0 so wheels built against numpy 1.x are compatible
+numpy>=1.24.0,<2.0.0
 
-# 2) Core libraries
+# 2) Core libs
 pandas
-torch
 tqdm
 transformers
 langdetect
 plotly
 streamlit
 
-# 3) spaCy + prebuilt English model wheel
+# 3) PyTorch (built against numpy 1.x)
+torch==2.6.0
+
+# 4) spaCy + prebuilt English model
 spacy==3.5.0
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
