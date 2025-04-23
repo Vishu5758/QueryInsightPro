@@ -6,7 +6,7 @@ import re
 import time
 from datetime import datetime
 
-
+# Imports
 import streamlit as st
 import pandas as pd
 
@@ -50,33 +50,11 @@ if 'download_json' not in st.session_state:
 if 'analysis_results' not in st.session_state:
     st.session_state['analysis_results'] = None
 
-# Load models
-@st.cache_resource
-def load_nlp_models():
-    # spaCy
-    try:
-        import spacy
-        try:
-            nlp = spacy.load("en_core_web_sm")
-        except OSError:
-            import spacy.cli
-            spacy.cli.download("en_core_web_sm")
-            nlp = spacy.load("en_core_web_sm")
-    except ImportError:
-        st.warning("spaCy not installed—entity extraction disabled.")
-        nlp = None
-    # Sentiment
-    try:
-        from transformers import pipeline
-        sentiment_model = pipeline(
-            "sentiment-analysis", 
-            model="cardiffnlp/twitter-roberta-base-sentiment",
-            truncation=True
-        )
-    except Exception:
-        st.warning("Sentiment model could not be loaded—using fallback.")
-        sentiment_model = None
-    return nlp, sentiment_model
+# Using fallback models to avoid dependency issues
+nlp = None
+sentiment_model = None
+
+st.warning("Running in fallback mode - using rule-based analysis without NLP models.")
 
 # Analysis utilities
 def normalize_query(query):
@@ -100,30 +78,34 @@ def detect_intent(query):
 
 def extract_entities(query, nlp):
     """Extract named entities from the query"""
-    if nlp is None:
-        return []
-    
-    doc = nlp(query)
+    # Fallback simple entity extraction using regex patterns
     entities = []
-    for ent in doc.ents:
-        entities.append({
-            "text": ent.text,
-            "type": ent.label_,
-            "start": ent.start_char,
-            "end": ent.end_char
-        })
+    
+    # Simple patterns for common entities
+    patterns = {
+        "DATE": r'\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}\b|\b\d{1,2}(?:st|nd|rd|th)?\s+(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec),?\s+\d{4}\b|\b(?:next|last|this)\s+(?:weekend|week|month|year)\b|\b(?:yesterday|today|tomorrow)\b',
+        "LOCATION": r'\b(?:New York|Los Angeles|Chicago|Houston|Phoenix|Philadelphia|San Antonio|San Diego|Dallas|San Jose|Austin|Jacksonville|San Francisco|Columbus|Indianapolis|Fort Worth|Charlotte|Seattle|Denver|Washington|Boston|El Paso|Nashville|Detroit|Oklahoma City|Portland|Las Vegas|Memphis|Louisville|Baltimore|Milwaukee|Albuquerque|Tucson|Fresno|Sacramento|Kansas City|Long Beach|Mesa|Atlanta|Colorado Springs|Miami|Raleigh|Omaha|Minneapolis|Tulsa|Cleveland|Wichita|Arlington|New Orleans|Bakersfield|Tampa|Aurora|Honolulu|Anaheim|Santa Ana|Corpus Christi|Riverside|St. Louis|Lexington|Pittsburgh|Anchorage|Stockton|Cincinnati|Saint Paul|Toledo|Newark|Greensboro|Plano|Henderson|Lincoln|Buffalo|Fort Wayne|Jersey City|Chula Vista|Orlando|St. Petersburg|Norfolk|Chandler|Laredo|Madison|Durham|Lubbock|Winston-Salem|Garland|Glendale|Hialeah|Reno|Baton Rouge|Irvine|Chesapeake|Irving|Scottsdale|North Las Vegas|Fremont|Gilbert|San Bernardino|Boise|Birmingham)\b',
+        "PERSON": r'\b(?:[A-Z][a-z]+\s+[A-Z][a-z]+)\b',
+        "MONEY": r'\$\d+(?:,\d+)*(?:\.\d+)?|\d+\s+dollars|\d+\s+USD',
+        "ORGANIZATION": r'\b(?:Google|Microsoft|Apple|Amazon|Facebook|Tesla|Twitter|IBM|Intel|Nvidia|Netflix|Disney|Walmart|Target|Nike|Adidas|Samsung|Sony|Coca Cola|Pepsi|McDonald\'s|Burger King|Starbucks|Uber|Lyft|Airbnb|SpaceX|Boeing|Ford|Toyota|Honda|BMW|Mercedes|Ferrari|Porsche|Audi|Volkswagen|General Motors|Hyundai|Kia|Chrysler|Fiat|Chevrolet|Lexus|Bank of America|Wells Fargo|JPMorgan Chase|Citibank|Goldman Sachs|Morgan Stanley|Visa|Mastercard|American Express|PayPal|Venmo|Square|Stripe|Shopify|Adobe|Oracle|Salesforce|Slack|Zoom|Dropbox|Spotify|YouTube|Instagram|TikTok|Snapchat|LinkedIn|Reddit|Pinterest|WhatsApp|Telegram|Signal|WeChat|Line)\b',
+    }
+    
+    for entity_type, pattern in patterns.items():
+        matches = re.finditer(pattern, query, re.IGNORECASE)
+        for match in matches:
+            entities.append({
+                "text": match.group(0),
+                "type": entity_type,
+                "start": match.start(),
+                "end": match.end()
+            })
+    
     return entities
 
 def detect_language(query):
     """Detect the language of the query"""
-    try:
-        from langdetect import detect, LangDetectException
-        try:
-            return detect(query)
-        except LangDetectException:
-            return "unknown"
-    except ImportError:
-        return "unknown"
+    # Fallback to assuming English if detection fails
+    return "en"
 
 def assign_category(query, custom_categories=None):
     """Assign a category to the query based on keywords"""
@@ -191,15 +173,8 @@ def generate_relevance_score(query):
     return max(0, min(100, score))
 
 def detect_sentiment(query, model=None):
-    """Detect sentiment of the query"""
-    if model:
-        try:
-            result = model(query)
-            return result[0]['label'], result[0]['score']
-        except:
-            pass
-    
-    # Fallback: Simple rule-based approach
+    """Detect sentiment of the query using rule-based approach"""
+    # Rule-based sentiment analysis
     positive_words = ["good", "great", "excellent", "best", "like", "love", "awesome", "amazing"]
     negative_words = ["bad", "worst", "terrible", "hate", "dislike", "awful", "poor"]
     
@@ -304,7 +279,11 @@ with st.sidebar:
             """
             If dependencies fail at runtime, ensure you have:
             ```
-            pip install streamlit pandas spacy transformers langdetect plotly
+            pip install streamlit pandas
+            ```
+            For advanced NLP features (currently disabled):
+            ```
+            pip install spacy transformers langdetect
             python -m spacy download en_core_web_sm
             ```
             """
@@ -313,7 +292,6 @@ with st.sidebar:
 # Main UI
 st.markdown("# 🔍 QueryInsight Pro")
 st.markdown("Analyze search queries with AI-powered insights")
-nlp, sentiment_model = load_nlp_models()
 
 query = st.text_input(
     "",
