@@ -58,11 +58,12 @@ def load_nlp_model():
 
 @st.cache_resource
 def load_intent_model():
+    token = st.secrets["HUGGING_FACE_HUB_TOKEN"]
     return pipeline(
         "text-classification",
         model="mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis",
+        use_auth_token=token,
     )
-
 
 @st.cache_resource
 def load_sentiment_model():
