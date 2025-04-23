@@ -1,4 +1,8 @@
-#!/usr/bin/env bash
+#! /usr/bin/env bash
 python3 -m pip install --upgrade pip setuptools wheel
 pip install --no-cache-dir -r requirements.txt
+
+# log into HF so transformers can pull private or gated models
+echo $HUGGING_FACE_HUB_TOKEN | huggingface-cli login --token
+
 python3 -m spacy validate
