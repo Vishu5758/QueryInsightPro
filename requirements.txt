@@ -1,11 +1,15 @@
-streamlit
+# 1) Critical C-extension dependencies first
+numpy>=1.24.0
+
+# 2) Your core libs
 pandas
-spacy
+torch
+tqdm
 transformers
 langdetect
 plotly
-torch
-tqdm
+streamlit
 
-# Pull in the spaCy English model directly from GitHub
-en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
+# 3) spaCy and its model
+spacy==3.5.0
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
