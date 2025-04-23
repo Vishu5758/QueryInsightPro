@@ -286,7 +286,7 @@ with st.sidebar:
 st.markdown(
     """
 <div style="text-align:center; padding-bottom:10px;">
-    <h1 style="font-size:2.5rem;">✨ QueryInsight Pro: AI-Powered Search Query Annotation Suite</h1>
+    <h1 style="font-size:2.5rem;">✨ QueryInsight Pro: Search Query Annotation Suite</h1>
     <p style="color:#64748b; font-size:1.1rem;">
         Analyze, annotate and enhance search queries with state-of-the-art AI technology
     </p>
