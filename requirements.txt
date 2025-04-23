@@ -1,17 +1,14 @@
-# 1) Force numpy <2.0 so wheels built against numpy 1.x are compatible
-numpy>=1.24.0,<2.0.0
-
+# 1) Base numeric libraries
+numpy==1.24.3  # Pin to specific version
 # 2) Core libs
-pandas
+pandas==2.0.3  # Compatible with numpy 1.24.3
 tqdm
-transformers
+transformers==4.35.2  # Version compatible with torch 2.6.0
 langdetect
 plotly
 streamlit
-
 # 3) PyTorch (built against numpy 1.x)
 torch==2.6.0
-
 # 4) spaCy + prebuilt English model
 spacy==3.5.0
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
