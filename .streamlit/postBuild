@@ -1,5 +1,10 @@
-# .streamlit/postBuild
 #!/usr/bin/env bash
+
+# 1) Upgrade build tools so pip picks up prebuilt wheels
 python3 -m pip install --upgrade pip setuptools wheel
+
+# 2) Install everything from requirements.txt
 pip install --no-cache-dir -r requirements.txt
-python -m spacy download en_core_web_sm
+
+# 3) Quick sanity check that spaCy and its model are valid
+python3 -m spacy validate
